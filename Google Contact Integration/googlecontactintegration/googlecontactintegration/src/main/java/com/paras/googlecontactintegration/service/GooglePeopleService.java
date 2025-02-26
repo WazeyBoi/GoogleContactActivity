@@ -1,10 +1,7 @@
 package com.paras.googlecontactintegration.service;
 
 import com.google.api.services.people.v1.PeopleService;
-import com.google.api.services.people.v1.model.EmailAddress;
-import com.google.api.services.people.v1.model.ListConnectionsResponse;
-import com.google.api.services.people.v1.model.Name;
-import com.google.api.services.people.v1.model.Person;
+import com.google.api.services.people.v1.model.*;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
@@ -54,7 +51,7 @@ public class GooglePeopleService {
             PeopleService peopleService = createPeopleService();
             ListConnectionsResponse response = peopleService.people().connections()
                     .list("people/me")
-                    .setPersonFields("names,emailAddresses")
+                    .setPersonFields("names,emailAddresses,phoneNumbers")
                     .execute();
 
             List<Person> contacts = response.getConnections() != null ? response.getConnections() : new ArrayList<>();
@@ -66,39 +63,6 @@ public class GooglePeopleService {
             System.err.println("Error fetching contacts: " + e.getMessage());
             throw new IOException("Failed to retrieve contacts from Google People API", e);
         }
-    }
-
-    public Person addContact(String name, String email) throws IOException {
-        PeopleService peopleService = createPeopleService();
-
-        Person newContact = new Person()
-                .setNames(List.of(new Name().setGivenName(name)))
-                .setEmailAddresses(List.of(new EmailAddress().setValue(email)));
-
-        Person createdContact = peopleService.people().createContact(newContact).execute();
-        System.out.println("Created Contact: " + createdContact.getResourceName());
-        return createdContact;
-    }
-
-    public Person updateContact(String resourceName, String newName, String newEmail) throws IOException {
-        PeopleService peopleService = createPeopleService();
-
-        Person updatedContact = new Person()
-                .setNames(List.of(new Name().setGivenName(newName)))
-                .setEmailAddresses(List.of(new EmailAddress().setValue(newEmail)));
-
-        Person response = peopleService.people().updateContact(resourceName, updatedContact)
-                .setUpdatePersonFields("names,emailAddresses")
-                .execute();
-
-        System.out.println("Updated Contact: " + response.getResourceName());
-        return response;
-    }
-
-    public void deleteContact(String resourceName) throws IOException {
-        PeopleService peopleService = createPeopleService();
-        peopleService.people().deleteContact(resourceName).execute();
-        System.out.println("Deleted Contact: " + resourceName);
     }
 
 }

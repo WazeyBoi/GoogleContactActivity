@@ -24,22 +24,4 @@ public class ContactsController {
         return contacts;
     }
 
-    @PostMapping("/api/contacts/add")
-    public Person addNewContact(@RequestParam String name, @RequestParam String email) throws IOException {
-        return googlePeopleService.addContact(name, email);
-    }
-
-    @PutMapping("/api/contacts/update")
-    public Person updateExistingContact(@RequestParam String resourceName,
-                                        @RequestParam String name,
-                                        @RequestParam String email) throws IOException {
-        return googlePeopleService.updateContact(resourceName, name, email);
-    }
-
-    @DeleteMapping("/api/contacts/delete")
-    public String deleteExistingContact(@RequestParam String resourceName) throws IOException {
-        googlePeopleService.deleteContact(resourceName);
-        return "Deleted: " + resourceName;
-    }
-
 }
