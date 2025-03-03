@@ -65,4 +65,37 @@ public class GooglePeopleService {
         }
     }
 
+    public void addContact(String firstName, String lastName, String email, String phoneNumber) throws IOException {
+        Person contactToCreate = new Person()
+                .setNames(List.of(new Name().setGivenName(firstName).setFamilyName(lastName)))
+                .setEmailAddresses(List.of(new EmailAddress().setValue(email)))
+                .setPhoneNumbers(List.of(new PhoneNumber().setValue(phoneNumber)));
+    
+        PeopleService peopleService = createPeopleService();
+        peopleService.people().createContact(contactToCreate).execute();
+    }
+
+    public Person getContact(String resourceName) throws IOException {
+        PeopleService peopleService = createPeopleService();
+        return peopleService.people().get(resourceName)
+                .setPersonFields("names,emailAddresses,phoneNumbers,metadata")
+                .execute();
+    }
+
+    public void updateContact(String resourceName, String firstName, String lastName, String email, String phoneNumber) throws IOException {
+        Person existingContact = getContact(resourceName);  // Get fresh etag
+    
+        Person contactToUpdate = new Person()
+                .setEtag(existingContact.getEtag())
+                .setNames(List.of(new Name().setGivenName(firstName).setFamilyName(lastName)))
+                .setEmailAddresses(List.of(new EmailAddress().setValue(email)))
+                .setPhoneNumbers(List.of(new PhoneNumber().setValue(phoneNumber)));
+    
+        PeopleService peopleService = createPeopleService();
+    
+        peopleService.people().updateContact(resourceName, contactToUpdate)
+                .setUpdatePersonFields("names,emailAddresses,phoneNumbers")
+                .execute();
+    }
+
 }
