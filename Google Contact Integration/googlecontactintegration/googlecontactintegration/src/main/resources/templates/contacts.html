@@ -65,12 +65,10 @@
             <td th:text="${contact.emailAddresses != null and contact.emailAddresses.size() > 0 ? contact.emailAddresses[0].value : 'No Email'}"></td>
             <td th:text="${contact.phoneNumbers != null and contact.phoneNumbers.size() > 0 ? contact.phoneNumbers[0].value : 'No Number'}"></td>
             <td class="action-buttons">
-                <!-- Edit Button (Opens Modal) -->
-                <button class="btn btn-warning btn-sm"
-                        data-bs-toggle="modal"
-                        th:attr="data-bs-target='#editContactModal-' + ${contact.resourceName}">
+                <!-- Edit Button (Redirects to Edit Page) -->
+                <a th:href="@{/edit-contact(resourceName=${contact.resourceName})}" class="btn btn-warning btn-sm">
                     ✏️ Edit
-                </button>
+                </a>
 
                 <!-- Delete Button (Calls Delete API) -->
                 <form action="/api/contacts/delete" method="POST" class="d-inline">
