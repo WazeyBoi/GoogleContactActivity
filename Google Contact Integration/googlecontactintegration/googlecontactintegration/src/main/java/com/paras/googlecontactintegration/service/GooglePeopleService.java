@@ -98,4 +98,9 @@ public class GooglePeopleService {
                 .execute();
     }
 
+    public void deleteContact(String resourceName) throws IOException {
+        PeopleService peopleService = createPeopleService();
+        peopleService.people().deleteContact(resourceName).execute();
+    }
+
 }

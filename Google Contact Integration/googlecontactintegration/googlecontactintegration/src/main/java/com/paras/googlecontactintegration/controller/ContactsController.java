@@ -64,4 +64,16 @@ public class ContactsController {
         return "redirect:/contacts";
     }
 
+    @PostMapping("/delete")
+    public String deleteContact(@RequestParam String resourceName, RedirectAttributes redirectAttributes) {
+        try {
+            googlePeopleService.deleteContact(resourceName);
+            redirectAttributes.addFlashAttribute("message", "Contact deleted successfully!");
+        } catch (IOException e) {
+            e.printStackTrace();
+            redirectAttributes.addFlashAttribute("error", "Failed to delete contact.");
+        }
+        return "redirect:/contacts";
+    }
+
 }
