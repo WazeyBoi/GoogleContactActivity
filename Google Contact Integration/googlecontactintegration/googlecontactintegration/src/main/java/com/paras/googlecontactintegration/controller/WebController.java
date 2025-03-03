@@ -12,7 +12,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.io.IOException;
 import java.util.List;
 
-@Controller // This ensures it returns Thymeleaf templates
+@Controller
 public class WebController {
 
     private final GooglePeopleService googlePeopleService;
@@ -26,11 +26,11 @@ public class WebController {
         try {
             List<Person> contacts = googlePeopleService.getContacts();
             model.addAttribute("contacts", contacts);
-            return "contacts"; // Must have contacts.html in /templates
+            return "contacts"; 
         } catch (IOException e) {
             e.printStackTrace();
             model.addAttribute("error", "Failed to fetch contacts.");
-            return "error"; // Must have error.html to handle failures
+            return "error";
         }
     }
 
