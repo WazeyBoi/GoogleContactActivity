@@ -30,10 +30,10 @@ public class ContactsController {
 
     @PostMapping("/add")
     public String addContact(@RequestParam String firstName, @RequestParam String lastName,
-                            @RequestParam String email, @RequestParam String phoneNumber,
-                            RedirectAttributes redirectAttributes) {
+                             @RequestParam List<String> emails, @RequestParam List<String> phoneNumbers,
+                             RedirectAttributes redirectAttributes) {
         try {
-            googlePeopleService.addContact(firstName, lastName, email, phoneNumber);
+            googlePeopleService.addContact(firstName, lastName, emails, phoneNumbers);
             redirectAttributes.addFlashAttribute("message", "Contact added successfully!");
             return "redirect:/contacts";
         } catch (IOException e) {
@@ -47,11 +47,11 @@ public class ContactsController {
     public String updateContact(@RequestParam String resourceName,
                                 @RequestParam String firstName,
                                 @RequestParam String lastName,
-                                @RequestParam String email,
-                                @RequestParam String phoneNumber,
+                                @RequestParam List<String> emails,
+                                @RequestParam List<String> phoneNumbers,
                                 RedirectAttributes redirectAttributes) {
         try {
-            googlePeopleService.updateContact(resourceName, firstName, lastName, email, phoneNumber);
+            googlePeopleService.updateContact(resourceName, firstName, lastName, emails, phoneNumbers);
             redirectAttributes.addFlashAttribute("message", "Contact updated successfully!");
         } catch (IOException e) {
             e.printStackTrace();
